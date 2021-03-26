@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.81.0" />
+
+
+<title>Cleaning text homework - Chase Stubbs&#39; Blog</title>
+<meta property="og:title" content="Cleaning text homework - Chase Stubbs&#39; Blog">
+
+
+  <link href='http://chasestubbs.github.io/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/ChaseStubbs">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/juststubbs7">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">5 min read</span>
+    
+
+    <h1 class="article-title">Cleaning text homework</h1>
+
+    
+    <span class="article-date">2021-03-26</span>
+    
+
+    <div class="article-content">
+      
+<script src="http://chasestubbs.github.io/2021/03/26/cleaning-text-homework/index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>I am going to take the data given to me for this assignment and separate a column into new columns. I also would like to clean up the data to be easier to read and use for later projects. The first step is always to load the library tidyverse. I also added ggalt for future use.</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.0.5     ✓ dplyr   1.0.3
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(ggalt)</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;ggalt&#39;:
+##   method                  from   
+##   grid.draw.absoluteGrob  ggplot2
+##   grobHeight.absoluteGrob ggplot2
+##   grobWidth.absoluteGrob  ggplot2
+##   grobX.absoluteGrob      ggplot2
+##   grobY.absoluteGrob      ggplot2</code></pre>
+<p>The data set given to me was titled “badfootballlogs19”, so I thought naming the data frame “badlogs” would only be fitting. I then read the csv to get the project underway.</p>
+<pre class="r"><code>badlogs &lt;- read_csv(&quot;badfootballlogs19.csv&quot;)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   .default = col_double(),
+##   Date = col_character(),
+##   HomeAway = col_character(),
+##   Opponent = col_character(),
+##   Result = col_character(),
+##   TeamFull = col_character(),
+##   TeamURL = col_character(),
+##   Team = col_character(),
+##   Conference = col_character()
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
+<p>First, I wanted to take a look at the data using head to see what I was working on. It shows the results from every game, but it combines the wins and loses with the score as W(24-20). I want to break that up so it shows the result, the team’s score, and the opponent’s score all separately.</p>
+<pre class="r"><code>head(badlogs)</code></pre>
+<pre><code>## # A tibble: 6 x 51
+##    Game Date  HomeAway Opponent Result PassingCmp PassingAtt PassingPct
+##   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+## 1     1 8/24… N        Miami (… W (24…         17         27       63  
+## 2     2 9/7/… &lt;NA&gt;     Tenness… W (45…         30         36       83.3
+## 3     3 9/14… @        Kentucky W (29…         21         30       70  
+## 4     4 9/21… &lt;NA&gt;     Tenness… W (34…         24         34       70.6
+## 5     5 9/28… &lt;NA&gt;     Towson   W (38…         24         28       85.7
+## 6     6 10/5… &lt;NA&gt;     Auburn   W (24…         25         39       64.1
+## # … with 43 more variables: PassingYds &lt;dbl&gt;, PassingTD &lt;dbl&gt;,
+## #   RushingAtt &lt;dbl&gt;, RushingYds &lt;dbl&gt;, RushingAvg &lt;dbl&gt;, RushingTD &lt;dbl&gt;,
+## #   OffensivePlays &lt;dbl&gt;, OffensiveYards &lt;dbl&gt;, OffenseAvg &lt;dbl&gt;,
+## #   FirstDownPass &lt;dbl&gt;, FirstDownRush &lt;dbl&gt;, FirstDownPen &lt;dbl&gt;,
+## #   FirstDownTotal &lt;dbl&gt;, Penalties &lt;dbl&gt;, PenaltyYds &lt;dbl&gt;, Fumbles &lt;dbl&gt;,
+## #   Interceptions &lt;dbl&gt;, TotalTurnovers &lt;dbl&gt;, TeamFull &lt;chr&gt;, TeamURL &lt;chr&gt;,
+## #   DefPassingCmp &lt;dbl&gt;, DefPassingAtt &lt;dbl&gt;, DefPassingPct &lt;dbl&gt;,
+## #   DefPassingYds &lt;dbl&gt;, DefPassingTD &lt;dbl&gt;, DefRushingAtt &lt;dbl&gt;,
+## #   DefRushingYds &lt;dbl&gt;, DefRushingAvg &lt;dbl&gt;, DefRushingTD &lt;dbl&gt;,
+## #   DefPlays &lt;dbl&gt;, DefYards &lt;dbl&gt;, DefAvg &lt;dbl&gt;, DefFirstDownPass &lt;dbl&gt;,
+## #   DefFirstDownRush &lt;dbl&gt;, DefFirstDownPen &lt;dbl&gt;, DefFirstDownTotal &lt;dbl&gt;,
+## #   DefPenalties &lt;dbl&gt;, DefPenaltyYds &lt;dbl&gt;, DefFumbles &lt;dbl&gt;,
+## #   DefInterceptions &lt;dbl&gt;, DefTotalTurnovers &lt;dbl&gt;, Team &lt;chr&gt;,
+## #   Conference &lt;chr&gt;</code></pre>
+<p>The first step I took was separating the Result column into two new fields, Outcome and Score. The score of the games was still together in parenthesis though, and I would like to remove those. I had to make two lines of separate code to get the “(” and “)” out of the way since I can’t remove both at the same time. I used gsub to do this. I used the escape character \ followed by what I wished to remove in that line. This almost gives us the finished product. The last thing I needed to do was separate the scores into two more columns, TeamScore and OpponentScore. I used the same separate data as before as my guideline, but instead used the hyphen in between the two scores to get them to the proper columns. This makes the data set a lot easier to read and use for future works. Lastly, I put my badlogs work into a new frame called logswithscore.</p>
+<pre class="r"><code>logswithscore &lt;- badlogs %&gt;% 
+  separate(Result, into=c(&quot;Outcome&quot;, &quot;Score&quot;), sep=&quot; &quot;) %&gt;% 
+  mutate(Score = gsub(&quot;\\(&quot;,&quot;&quot;,Score)) %&gt;% 
+  mutate(Score = gsub(&quot;\\)&quot;,&quot;&quot;,Score)) %&gt;% 
+  separate(Score, into=c(&quot;TeamScore&quot;, &quot;OpponentScore&quot;), sep=&quot;-&quot;)</code></pre>
+<p>I took my work from above with logswithscore and put it a new frame again called worstgames. This new frame will have another new field called Differential, which is TeamScore-OpponentScore. I had to mutate those columns first from text to numbers. This then let me subtract the two to get differential. Finally, I filtered to only carry teams that were beaten by 65 points or more. This left 5 very sad teams in this data frame.</p>
+<pre class="r"><code>worstgames &lt;- logswithscore %&gt;% 
+  mutate(TeamScore = as.numeric(TeamScore), OpponentScore = as.numeric(OpponentScore)) %&gt;%
+  mutate(Differential=TeamScore-OpponentScore) %&gt;%
+  filter(Differential&gt;65)</code></pre>
+<p>For my final step, I created two scatterplots and placed one right on top of the other. I used my logswithscore data first as the base. I made those dots grey so they didn’t stand out as much. I then placed my worstgames data right over it with the same x and y coordinates of TeamScore and OpponentScore. For the worst games plot, I made those dots red so they would pop. I encircled the dots to draw the viewer’s eye there right away.</p>
+<p>I had to give to scatterplot I created a title. I settled on “5 teams got dismantled in 2019” which is exactly what the chart shows. The subtitle gives more context to these games but leaves the viewer wondering what exactly led those teams to lose so badly. I changed some of the text sizes to look better and added a minimal theme to drop the grey background. I finished it up by giving credit to the source of the data and myself for creating the visual.</p>
+<pre class="r"><code>ggplot() + geom_point(data = logswithscore, aes(x=TeamScore, y=OpponentScore), color=&quot;grey&quot;) + geom_point(data = worstgames, aes(x=TeamScore, y=OpponentScore), color=&quot;red&quot;) + geom_encircle(data=worstgames, aes(x=TeamScore, y=OpponentScore), s_shape=.6, expand=.025, colour=&quot;red&quot;) + geom_text(aes(x=73, y=12, label=&quot;Wost Games&quot;)) + labs(title=&quot;Five teams got dismantled in 2019.&quot;, subtitle=&quot;These teams were clearly outmatched, outcoached, or just not as talented&quot;, y=&quot;OpponentScore&quot;, x=&quot;TeamScore&quot;, caption=&quot;Source: Sports-Reference.com | By Chase Stubbs&quot;) +
+  theme_minimal() +
+theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    ) </code></pre>
+<p><img src="http://chasestubbs.github.io/2021/03/26/cleaning-text-homework/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

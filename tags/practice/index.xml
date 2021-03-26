@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Chase Stubbs&#39; Blog</title>
-    <link>http://chasestubbs.github.io/</link>
-    <description>Recent content on Chase Stubbs&#39; Blog</description>
+    <title>practice on Chase Stubbs&#39; Blog</title>
+    <link>http://chasestubbs.github.io/tags/practice/</link>
+    <description>Recent content in practice on Chase Stubbs&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://chasestubbs.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://chasestubbs.github.io/tags/practice/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Cleaning text homework</title>
       <link>http://chasestubbs.github.io/2021/03/26/cleaning-text-homework/</link>
