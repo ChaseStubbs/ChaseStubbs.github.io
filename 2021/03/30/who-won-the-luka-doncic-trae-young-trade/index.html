@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.81.0" />
+
+
+<title>Who won the Luka Doncic-Trae Young trade? - Chase Stubbs&#39; Blog</title>
+<meta property="og:title" content="Who won the Luka Doncic-Trae Young trade? - Chase Stubbs&#39; Blog">
+
+
+  <link href='http://chasestubbs.github.io/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/ChaseStubbs">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/juststubbs7">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Who won the Luka Doncic-Trae Young trade?</h1>
+
+    
+    <span class="article-date">2021-03-30</span>
+    
+
+    <div class="article-content">
+      
+<script src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/header-attrs/header-attrs.js"></script>
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.0.5     ✓ dplyr   1.0.3
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(ggrepel)
+library(ggalt)</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;ggalt&#39;:
+##   method                  from   
+##   grid.draw.absoluteGrob  ggplot2
+##   grobHeight.absoluteGrob ggplot2
+##   grobWidth.absoluteGrob  ggplot2
+##   grobX.absoluteGrob      ggplot2
+##   grobY.absoluteGrob      ggplot2</code></pre>
+<pre class="r"><code>clean18 &lt;- read_csv(&quot;1819NBAstats.csv&quot;) %&gt;% 
+  mutate(&quot;Season&quot; = &quot;2018-2019&quot;)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   .default = col_double(),
+##   Player = col_character(),
+##   Pos = col_character(),
+##   Tm = col_character()
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre class="r"><code>clean19 &lt;- read_csv(&quot;1920NBAStats.csv&quot;) %&gt;% 
+  mutate(&quot;Season&quot; = &quot;2019-2020&quot;)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   .default = col_double(),
+##   Player = col_character(),
+##   Pos = col_character(),
+##   Tm = col_character()
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre class="r"><code>clean20 &lt;- read_csv(&quot;20-21NBAstats.csv&quot;) %&gt;% 
+  mutate(&quot;Season&quot; = &quot;2020-2021&quot;)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   .default = col_double(),
+##   Player = col_character(),
+##   Pos = col_character(),
+##   Tm = col_character()
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre class="r"><code>allplayers &lt;- bind_rows(clean18, clean19, clean20) %&gt;%
+  mutate(Player=gsub(&quot;\\\\.*&quot;,&quot;&quot;,Player))
+
+
+luka &lt;- allplayers %&gt;% filter(Player == &quot;Luka Dončić&quot;) 
+trae &lt;- allplayers %&gt;% filter(Player == &quot;Trae Young&quot;)
+
+both &lt;- bind_rows(luka, trae) %&gt;% mutate(PlayerSeason = paste(Player, Season, sep=&quot; &quot;))
+
+guards &lt;- allplayers %&gt;% filter(Pos == &quot;PG&quot; | Pos == &quot;SG&quot;)</code></pre>
+<pre class="r"><code>allplayers %&gt;% 
+  ggplot() + 
+    geom_point(data=guards, aes(x=MP, y=PTS), color=&quot;grey&quot;) +
+    geom_point(data=both, aes(x=MP, y=PTS, color=Player)) +
+    geom_text_repel(data=both, aes(x=MP, y=PTS, label=PlayerSeason)) +
+    labs(x=&quot;Minutes Played&quot;, y=&quot;Points Per Game&quot;, title=&quot;Luka and Trae came in hot&quot;, subtitle=&quot;Both are among the top scoring guards in the league already.&quot;, caption=&quot;Source: Basketball-Reference.com | By Chase Stubbs&quot;) +
+    theme_minimal() +
+    theme(
+    plot.title = element_text(size = 18, face = &quot;bold&quot;),
+    plot.subtitle = element_text(size=10),
+    axis.title = element_text(size = 8),
+    panel.grid.minor = element_blank()
+  )  + 
+    scale_color_manual(values=c(&quot;#00538C&quot;, &quot;#E03A3E&quot;)) </code></pre>
+<p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>rookies &lt;- read_csv(&quot;2018rookies.csv&quot;) %&gt;% top_n(14)</code></pre>
+<pre><code>## Warning: Duplicated column names deduplicated: &#39;MP&#39; =&gt; &#39;MP_1&#39; [15], &#39;PTS&#39; =&gt;
+## &#39;PTS_1&#39; [16], &#39;TRB&#39; =&gt; &#39;TRB_1&#39; [17], &#39;AST&#39; =&gt; &#39;AST_1&#39; [18]</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   .default = col_double(),
+##   Tm = col_character(),
+##   Player = col_character(),
+##   College = col_character()
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
+<pre><code>## Selecting by VORP</code></pre>
+<pre class="r"><code>top &lt;- rookies %&gt;% filter(Player == &quot;Luka Dončić&quot; | Player == &quot;Trae Young&quot;)</code></pre>
+<pre class="r"><code>ggplot() +
+  geom_bar(data=rookies, aes(x=reorder(Player, VORP), weight=VORP)) + 
+  geom_bar(data=top, aes(x=reorder(Player, VORP), weight=VORP, fill=Player)) + 
+  coord_flip() + 
+  scale_fill_manual(values=c(&quot;#00538C&quot;, &quot;#E03A3E&quot;)) +
+  labs(x=&quot;&quot;, y=&quot;Value Over Replacement Player(VORP)&quot;, title=&quot;Dallas and Atlanta won the lottery.&quot;, subtitle=&quot;Doncic doubles Trae in terms of value on the floor however.&quot;, caption=&quot;Source: Basketball-Reference.com | By Chase Stubbs&quot;) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = &quot;bold&quot;),
+    plot.subtitle = element_text(size=10),
+    axis.title = element_text(size = 8),
+    panel.grid.minor = element_blank()
+  ) </code></pre>
+<p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>allstars &lt;- allplayers %&gt;%
+  filter(Player == &quot;James Harden&quot; | Player == &quot;Luka Dončić&quot; |
+    Player == &quot;Trae Young&quot; | Player == &quot;Chris Paul&quot; | Player == &quot;Russell Westbrook&quot; |
+    Player == &quot;Damian Lillard&quot; | Player == &quot;Luka Dončić&quot; | Player == &quot;Donovan Mitchell&quot; |
+    Player == &quot;Kyle Lowry&quot; | Player == &quot;Ben Simmons&quot; | Player == &quot;Jimmy Butler&quot;)</code></pre>
+<pre class="r"><code>AVGallstars &lt;- allstars %&gt;%
+  group_by(Player) %&gt;%
+  summarise(
+    AvgAssists = mean(AST),
+    AvgTurnovers = mean(TOV),
+    AvgRebounds = mean(TRB)
+  )</code></pre>
+<pre class="r"><code>LukaAvg &lt;- AVGallstars %&gt;% filter(Player == &quot;Luka Dončić&quot;)
+TraeAVG &lt;- AVGallstars %&gt;% filter(Player == &quot;Trae Young&quot;)</code></pre>
+<pre class="r"><code>ggplot() + 
+  geom_dumbbell(
+    data=AVGallstars, 
+    aes(y=reorder(Player, AvgAssists), x=AvgAssists, xend=AvgRebounds),
+    size = 1,
+    color = &quot;grey&quot;,
+    colour_x = &quot;#228B22&quot;,
+    colour_xend = &quot;red&quot;
+  ) +
+  geom_dumbbell(
+    data=LukaAvg, 
+    aes(y=reorder(Player, AvgAssists), x=AvgAssists, xend=AvgRebounds),
+    size = 1.2,
+    color = &quot;#00538C&quot;,
+    colour_x = &quot;#228B22&quot;,
+    colour_xend = &quot;red&quot;
+  ) +
+  geom_dumbbell(
+    data=TraeAVG, 
+    aes(y=reorder(Player, AvgAssists), x=AvgAssists, xend=AvgRebounds),
+    size = 1.2,
+    color = &quot;#E03A3E&quot;,
+    colour_x = &quot;#228B22&quot;,
+    colour_xend = &quot;red&quot;) +
+  labs(x=&quot;Assist to Rebound Ratio&quot;, y=&quot;&quot;, title=&quot;Both pass the ball well, but Luka has an edge&quot;, subtitle=&quot;Luka crashes the boards the most only behind Russell Westbrook.&quot;, caption=&quot;Source: Basketball-Reference | By Chase Stubbs&quot;) + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )</code></pre>
+<p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
