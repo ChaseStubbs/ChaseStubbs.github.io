@@ -62,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">4 min read</span>
+    <span class="article-duration">8 min read</span>
     
 
     <h1 class="article-title">Who won the Luka Doncic-Trae Young trade?</h1>
@@ -76,6 +76,9 @@
 <script src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/header-attrs/header-attrs.js"></script>
 
 
+<p>The NBA draft is conducted much different than other major sports drafts. The NBA allows teams to trade a player immediately after they are selected which creates an interesting dynamic. A drafted player can wear the hat for one team but then end up being on a different team a few minutes later.</p>
+<p>In the 2018 NBA Draft, The Atlanta Hawks took Luka Dončić with the 3rd overall pick. He walked up on stage and shook the hand of Adam Silver, the NBA commissioner. All while wearing the deep red hat with the Hawks’ logo on it. Two selections later, the Dallas Mavericks selected Trae Young. He would do the same as all the other draft picks before him while wearing a dark blur Mavericks hat.</p>
+<p>Luka and Trae were traded away from the teams that drafted them for each other that night. Ultimately, it was a pick swap. Both players have shown they belong in the league, but who won the trade?</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
 <pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
@@ -94,6 +97,8 @@ library(ggalt)</code></pre>
 ##   grobWidth.absoluteGrob  ggplot2
 ##   grobX.absoluteGrob      ggplot2
 ##   grobY.absoluteGrob      ggplot2</code></pre>
+<p>The source of my data comes from Sports-Reference’s NBA site. I wanted to see who has been the better all-around player to determine who has won the trade. I used statistics such as points per game, assists, and rebounds to compare the two.</p>
+<p>I first need to clean up the data that I used to make it easier to work on. I also started by creating data frames. I combined my data from the two previous seasons and the current season. I put my data into a data frame that has every player from the 2018 to 2020 season.</p>
 <pre class="r"><code>clean18 &lt;- read_csv(&quot;1819NBAstats.csv&quot;) %&gt;% 
   mutate(&quot;Season&quot; = &quot;2018-2019&quot;)</code></pre>
 <pre><code>## 
@@ -128,15 +133,16 @@ library(ggalt)</code></pre>
 ## )
 ## ℹ Use `spec()` for the full column specifications.</code></pre>
 <pre class="r"><code>allplayers &lt;- bind_rows(clean18, clean19, clean20) %&gt;%
-  mutate(Player=gsub(&quot;\\\\.*&quot;,&quot;&quot;,Player))
-
-
-luka &lt;- allplayers %&gt;% filter(Player == &quot;Luka Dončić&quot;) 
+  mutate(Player=gsub(&quot;\\\\.*&quot;,&quot;&quot;,Player))</code></pre>
+<p>I want to look at how Luka’s and Trae’s games translated to the league since both were dominant guards in their years leading up to the NBA. I filtered out Luka and Trae from my data with every player and combined them just like I did in the block above. Since they are also both guards, I want to see how they stack up to players of the same position.</p>
+<pre class="r"><code>luka &lt;- allplayers %&gt;% filter(Player == &quot;Luka Dončić&quot;) 
 trae &lt;- allplayers %&gt;% filter(Player == &quot;Trae Young&quot;)
 
-both &lt;- bind_rows(luka, trae) %&gt;% mutate(PlayerSeason = paste(Player, Season, sep=&quot; &quot;))
+both &lt;- bind_rows(luka, trae) %&gt;% 
+  mutate(PlayerSeason = paste(Player, Season, sep=&quot; &quot;))
 
 guards &lt;- allplayers %&gt;% filter(Pos == &quot;PG&quot; | Pos == &quot;SG&quot;)</code></pre>
+<p>Both players have established themselves as prolific scorers in the league from the moment they stepped on the court. But how has their game evolved to the always-changing NBA?</p>
 <pre class="r"><code>allplayers %&gt;% 
   ggplot() + 
     geom_point(data=guards, aes(x=MP, y=PTS), color=&quot;grey&quot;) +
@@ -148,10 +154,13 @@ guards &lt;- allplayers %&gt;% filter(Pos == &quot;PG&quot; | Pos == &quot;SG&qu
     plot.title = element_text(size = 18, face = &quot;bold&quot;),
     plot.subtitle = element_text(size=10),
     axis.title = element_text(size = 8),
-    panel.grid.minor = element_blank()
+    panel.grid.minor = element_blank(),
+    legend.position = &quot;none&quot;
   )  + 
     scale_color_manual(values=c(&quot;#00538C&quot;, &quot;#E03A3E&quot;)) </code></pre>
-<p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>In the 2018-19 season, their rookie years, both were among the top of the league in minutes per game and scoring amongst guards. They averaged around 20 points with 30+ minutes. It appears that both teams got their next star.</p>
+<p>The 2019-2020 season was the first time Luka and Trae were selected to the All-Star Game, and it is easy to see why. Both Luka’s and Trae’s PPG and MP jumped drastically. Trae’s scoring and minutes jumped much more significantly than Luka’s did though. In the current season of 2020-21, we see a drop of about 5 PPG for Trae while Luka maintained what he did in the prior season.</p>
 <pre class="r"><code>rookies &lt;- read_csv(&quot;2018rookies.csv&quot;) %&gt;% top_n(14)</code></pre>
 <pre><code>## Warning: Duplicated column names deduplicated: &#39;MP&#39; =&gt; &#39;MP_1&#39; [15], &#39;PTS&#39; =&gt;
 ## &#39;PTS_1&#39; [16], &#39;TRB&#39; =&gt; &#39;TRB_1&#39; [17], &#39;AST&#39; =&gt; &#39;AST_1&#39; [18]</code></pre>
@@ -166,12 +175,15 @@ guards &lt;- allplayers %&gt;% filter(Pos == &quot;PG&quot; | Pos == &quot;SG&qu
 ## ℹ Use `spec()` for the full column specifications.</code></pre>
 <pre><code>## Selecting by VORP</code></pre>
 <pre class="r"><code>top &lt;- rookies %&gt;% filter(Player == &quot;Luka Dončić&quot; | Player == &quot;Trae Young&quot;)</code></pre>
+<p>Luka and Trae are good at putting the ball through the hoop, but how do they stack up against the rest of the 2018 class?</p>
+<p>I compared them to all the other players taken in the lottery that year since those are supposed to be the cream of the crop that year. I looked at all the top 14 picks from the 2018 draft and the individual players VORP(Valuable Above Replacement Player).</p>
+<p>The best way to describe the VORP rating is with an example.</p>
 <pre class="r"><code>ggplot() +
   geom_bar(data=rookies, aes(x=reorder(Player, VORP), weight=VORP)) + 
   geom_bar(data=top, aes(x=reorder(Player, VORP), weight=VORP, fill=Player)) + 
   coord_flip() + 
   scale_fill_manual(values=c(&quot;#00538C&quot;, &quot;#E03A3E&quot;)) +
-  labs(x=&quot;&quot;, y=&quot;Value Over Replacement Player(VORP)&quot;, title=&quot;Dallas and Atlanta won the lottery.&quot;, subtitle=&quot;Doncic doubles Trae in terms of value on the floor however.&quot;, caption=&quot;Source: Basketball-Reference.com | By Chase Stubbs&quot;) +
+  labs(x=&quot;&quot;, y=&quot;Value Over Replacement Player(VORP)&quot;, title=&quot;Dallas and Atlanta won the lottery&quot;, subtitle=&quot;Doncic doubles Trae in terms of value on the floor however.&quot;, caption=&quot;Source: Basketball-Reference.com | By Chase Stubbs&quot;) +
   theme_minimal() +
   theme(
     plot.title = element_text(size = 18, face = &quot;bold&quot;),
@@ -179,21 +191,25 @@ guards &lt;- allplayers %&gt;% filter(Pos == &quot;PG&quot; | Pos == &quot;SG&qu
     axis.title = element_text(size = 8),
     panel.grid.minor = element_blank()
   ) </code></pre>
-<p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>This rating shows how much more valuable Luka is compared to Trae when on the floor. VORP pretty much tells you how many more points a team will score with the said player on that court compared to who they have instead. If Luka is out a game and the Mavericks score 100 points, this data says they would have score 112 with him playing. Luka doubles Trae in VORP and is the standout of the class.</p>
+<p>Luka and Trae both appear to be the best players from their class by a wide margin. So congratulations to the Mavericks and Hawks for not getting a bust. But how do they stack up to All-Pro guards like Russell Westbrook and James Harden?</p>
 <pre class="r"><code>allstars &lt;- allplayers %&gt;%
   filter(Player == &quot;James Harden&quot; | Player == &quot;Luka Dončić&quot; |
     Player == &quot;Trae Young&quot; | Player == &quot;Chris Paul&quot; | Player == &quot;Russell Westbrook&quot; |
     Player == &quot;Damian Lillard&quot; | Player == &quot;Luka Dončić&quot; | Player == &quot;Donovan Mitchell&quot; |
     Player == &quot;Kyle Lowry&quot; | Player == &quot;Ben Simmons&quot; | Player == &quot;Jimmy Butler&quot;)</code></pre>
+<p>They both were selected as All-Star game starters their second year in the league. I want to see how they compare to the other guards that were chosen that year, so I created a data frame that filters out every player except the all-stars.</p>
 <pre class="r"><code>AVGallstars &lt;- allstars %&gt;%
   group_by(Player) %&gt;%
   summarise(
     AvgAssists = mean(AST),
-    AvgTurnovers = mean(TOV),
     AvgRebounds = mean(TRB)
-  )</code></pre>
-<pre class="r"><code>LukaAvg &lt;- AVGallstars %&gt;% filter(Player == &quot;Luka Dončić&quot;)
+  )
+
+  LukaAvg &lt;- AVGallstars %&gt;% filter(Player == &quot;Luka Dončić&quot;)
 TraeAVG &lt;- AVGallstars %&gt;% filter(Player == &quot;Trae Young&quot;)</code></pre>
+<p>We have seen that both players are terrific scorers, but there are other important facets of the game. Are they all-around players, or can all they do is score? I found the average assists and rebounds of all the guards that I selected earlier. Lastly, I grabbed Luka’s and Trae’s averages of those stats and put them in their data frames.</p>
 <pre class="r"><code>ggplot() + 
   geom_dumbbell(
     data=AVGallstars, 
@@ -206,7 +222,7 @@ TraeAVG &lt;- AVGallstars %&gt;% filter(Player == &quot;Trae Young&quot;)</code>
   geom_dumbbell(
     data=LukaAvg, 
     aes(y=reorder(Player, AvgAssists), x=AvgAssists, xend=AvgRebounds),
-    size = 1.2,
+    size = 1.5,
     color = &quot;#00538C&quot;,
     colour_x = &quot;#228B22&quot;,
     colour_xend = &quot;red&quot;
@@ -214,11 +230,11 @@ TraeAVG &lt;- AVGallstars %&gt;% filter(Player == &quot;Trae Young&quot;)</code>
   geom_dumbbell(
     data=TraeAVG, 
     aes(y=reorder(Player, AvgAssists), x=AvgAssists, xend=AvgRebounds),
-    size = 1.2,
+    size = 1.5,
     color = &quot;#E03A3E&quot;,
     colour_x = &quot;#228B22&quot;,
     colour_xend = &quot;red&quot;) +
-  labs(x=&quot;Assist to Rebound Ratio&quot;, y=&quot;&quot;, title=&quot;Both pass the ball well, but Luka has an edge&quot;, subtitle=&quot;Luka crashes the boards the most only behind Russell Westbrook.&quot;, caption=&quot;Source: Basketball-Reference | By Chase Stubbs&quot;) + 
+  labs(x=&quot;Assists vs Rebounds&quot;, y=&quot;&quot;, title=&quot;Both pass well, but Luka has an edge on the boards&quot;, subtitle=&quot;Luka crashes the boards (the red dot) the most only behind Russell Westbrook, where \nTrae Young leads on assists (the green dot).&quot;, caption=&quot;Source: Basketball-Reference | By Chase Stubbs&quot;) + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = &quot;bold&quot;),
@@ -227,6 +243,9 @@ TraeAVG &lt;- AVGallstars %&gt;% filter(Player == &quot;Trae Young&quot;)</code>
     panel.grid.minor = element_blank()
   )</code></pre>
 <p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>From 2018-2021, Trae averages the least amount of rebounds compared to the other 2018 all-star guards. On the other hand, he does pass the ball veryy well. He has the third-highest assist rating only behind Harden and Westbrook. He spreads the floor very well with his ability to shoot from anywhere, but I would not label him as an all-around guard.</p>
+<p>Luka shows much more versatility with the chart. He averages the second-most rebounds while only trailing Trae by about one assist. Luka and Trae have very different body types, which can easily explain this since Trae is only 6’1" and Luka is 6’7". Russell Westbrook is only two inches taller than Trae, so I do not see that as a valid argument for his low rebound numbers.</p>
+<p>Both guards are young, have all-star potential every year, and improve their teams with them on the floor. Both appear to be the best in their class. Luka and the Mavericks get the edge with him being an all-around guard, thanks to VORP rating and his rebound and assist numbers. I would say that both teams got a great player, but the Mavericks won the trade.</p>
 
     </div>
   </article>
