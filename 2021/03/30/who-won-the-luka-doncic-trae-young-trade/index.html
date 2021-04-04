@@ -176,7 +176,7 @@ guards &lt;- allplayers %&gt;% filter(Pos == &quot;PG&quot; | Pos == &quot;SG&qu
 <pre><code>## Selecting by VORP</code></pre>
 <pre class="r"><code>top &lt;- rookies %&gt;% filter(Player == &quot;Luka Dončić&quot; | Player == &quot;Trae Young&quot;)</code></pre>
 <p>Luka and Trae are good at putting the ball through the hoop, but how do they stack up against the rest of the 2018 class?</p>
-<p>I compared them to all the other players taken in the lottery that year since those are supposed to be the cream of the crop that year. I looked at all the top 14 picks from the 2018 draft and the individual players VORP(Valuable Above Replacement Player).</p>
+<p>I compared them to all the other players taken in the lottery that year since those players are supposed to be the cream of the crop. I looked at all the top 14 picks from the 2018 draft and the individual players VORP(Valuable Above Replacement Player).</p>
 <p>The best way to describe the VORP rating is with an example.</p>
 <pre class="r"><code>ggplot() +
   geom_bar(data=rookies, aes(x=reorder(Player, VORP), weight=VORP)) + 
@@ -192,7 +192,7 @@ guards &lt;- allplayers %&gt;% filter(Pos == &quot;PG&quot; | Pos == &quot;SG&qu
     panel.grid.minor = element_blank()
   ) </code></pre>
 <p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<p>This rating shows how much more valuable Luka is compared to Trae when on the floor. VORP pretty much tells you how many more points a team will score with the said player on that court compared to who they have instead. If Luka is out a game and the Mavericks score 100 points, this data says they would have score 112 with him playing. Luka doubles Trae in VORP and is the standout of the class.</p>
+<p>This rating shows how much more valuable Luka is compared to Trae when on the floor. VORP pretty much tells you how many more points a team will score with the said player on that court compared to who they have instead. If Luka is out a game and the Mavericks score 100 points, this data says they would have scored 112 with him playing. Luka doubles Trae in VORP and is the standout of the class.</p>
 <p>Luka and Trae both appear to be the best players from their class by a wide margin. So congratulations to the Mavericks and Hawks for not getting a bust. But how do they stack up to All-Pro guards like Russell Westbrook and James Harden?</p>
 <pre class="r"><code>allstars &lt;- allplayers %&gt;%
   filter(Player == &quot;James Harden&quot; | Player == &quot;Luka Dončić&quot; |
@@ -243,7 +243,7 @@ TraeAVG &lt;- AVGallstars %&gt;% filter(Player == &quot;Trae Young&quot;)</code>
     panel.grid.minor = element_blank()
   )</code></pre>
 <p><img src="http://chasestubbs.github.io/2021/03/30/who-won-the-luka-doncic-trae-young-trade/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<p>From 2018-2021, Trae averages the least amount of rebounds compared to the other 2018 all-star guards. On the other hand, he does pass the ball veryy well. He has the third-highest assist rating only behind Harden and Westbrook. He spreads the floor very well with his ability to shoot from anywhere, but I would not label him as an all-around guard.</p>
+<p>From 2018-2021, Trae averages the least amount of rebounds compared to the other 2018 all-star guards. On the other hand, he does pass the ball very well. He has the third-highest assist average only behind Harden and Westbrook. He spreads the floor very well with his ability to shoot from anywhere, but I would not label him as an all-around guard.</p>
 <p>Luka shows much more versatility with the chart. He averages the second-most rebounds while only trailing Trae by about one assist. Luka and Trae have very different body types, which can easily explain this since Trae is only 6’1" and Luka is 6’7". Russell Westbrook is only two inches taller than Trae, so I do not see that as a valid argument for his low rebound numbers.</p>
 <p>Both guards are young, have all-star potential every year, and improve their teams with them on the floor. Both appear to be the best in their class. Luka and the Mavericks get the edge with him being an all-around guard, thanks to VORP rating and his rebound and assist numbers. I would say that both teams got a great player, but the Mavericks won the trade.</p>
 
