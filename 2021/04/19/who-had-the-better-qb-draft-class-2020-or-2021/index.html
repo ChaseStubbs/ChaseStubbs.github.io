@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.81.0" />
+
+
+<title>Who Had The Better QB Draft Class? 2020 or 2021? - Chase Stubbs&#39; Blog</title>
+<meta property="og:title" content="Who Had The Better QB Draft Class? 2020 or 2021? - Chase Stubbs&#39; Blog">
+
+
+  <link href='http://chasestubbs.github.io/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/ChaseStubbs">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/juststubbs7">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">10 min read</span>
+    
+
+    <h1 class="article-title">Who Had The Better QB Draft Class? 2020 or 2021?</h1>
+
+    
+    <span class="article-date">2021-04-19</span>
+    
+
+    <div class="article-content">
+      
+<script src="http://chasestubbs.github.io/2021/04/19/who-had-the-better-qb-draft-class-2020-or-2021/index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>In the NFL, 32 teams play 16 games in 17 weeks for the chance to play in the Super Bowl. That means that a full NFL season, from preseason to Super Bowl, is roughly seven months. Teams don’t just compete during this time frame though. The real work for the Lombardi Trophy begins after the Super Bowl.</p>
+<p>The offseason is my favorite part of football. I love the idea of building a team through a draft, recruiting, or free agency. Watching the games is a blast, but it’s fun because of the behind-the-scenes work in the offseason. Champions are made in the offseason they do say.</p>
+<p>Due to COVID-19 restrictions, the NFL has not been able to have the combine the past two offseasons, but that hasn’t stopped the hype for the top quarterbacks in their respective classes. The 2020 quarterback class is regarded as one of the bests in recent memory, but 2021 has something to say about that with the likes of Trevor Lawrence and Justin Fields.</p>
+<p>So which class had the better QB class? 2020 or 2021?</p>
+<pre class="r"><code>library(tidyverse)
+library(ggrepel)
+library(ggalt)</code></pre>
+<p>The first step in finding which QB class is better is to load the libraries that I will need to create my charts. The tidyverse, ggrepel, and ggalt will make this whole process a lot easier and the charts cleaner.</p>
+<p>I also need to load in my data from Sports-Reference’s college football site. There wasn’t an easy way for me to get one CSV file to load all the quarterbacks at once, so just bear with me.</p>
+<p>I took the top four quarterbacks from the 2020 class and created data frames with each player’s career rushing and passing stats. I did the same with the 2021 class too. I chose four from each class because there were four quarterbacks taken in the first round last year.</p>
+<p>There is a possibility of more than four quarterbacks being drafted in the first round this year, but I needed to stay consistent. Also, The possible fifth quarterback taken is Alabama man, Mac Jones. Alabama has it good enough as it is, so I decided not to include him.</p>
+<pre class="r"><code>BurrowR &lt;- read_csv(&quot;Burrow Rush.csv&quot;)
+Burrow &lt;- read_csv(&quot;Burrow.csv&quot;)
+HerbertR &lt;- read_csv(&quot;Herbert Rush.csv&quot;)
+Herbert &lt;- read_csv(&quot;Herbert.csv&quot;)
+TuaR &lt;- read_csv(&quot;Tua Rush.csv&quot;)
+Tua &lt;- read_csv(&quot;Tua.csv&quot;)
+LoveR &lt;- read_csv(&quot;Love Rush.csv&quot;)
+Love &lt;- read_csv(&quot;Love.csv&quot;)
+LawrenceR &lt;- read_csv(&quot;Lawrence Rush.csv&quot;)
+Lawrence &lt;- read_csv(&quot;Lawrence.csv&quot;)
+WilsonR &lt;- read_csv(&quot;Wilson Rush.csv&quot;)
+Wilson &lt;- read_csv(&quot;Wilson.csv&quot;)
+FieldsR &lt;- read_csv(&quot;Fields Rush.csv&quot;)
+Fields &lt;- read_csv(&quot;Fields.csv&quot;)
+LanceR &lt;- read_csv(&quot;Lance Rush.csv&quot;)
+Lance &lt;- read_csv(&quot;Lance.csv&quot;)</code></pre>
+<p>The first few steps were to make my data easier to use since I had so many individual pieces. Right now all my data is like a 10,000 piece puzzle. It takes up too much space and is just a lot to handle. Puzzles aren’t my thing, but that analogy works well I think.</p>
+<p>The rushing and passing stats were in different data frames, so my next step in removing pieces is to combine these frames. This way I have one data frame with the name of the corresponding player and all of their stats instead of two with one stat a piece. I also had to mutate a new column to include each player’s name because one didn’t already exist in the data I found.</p>
+<p>I lastly put all the quarterbacks from the 2020 class into their data frame and named it just that, “QBS20”.</p>
+<pre class="r"><code>Burrow &lt;- bind_rows(BurrowR, Burrow) %&gt;%
+  mutate(Player = &quot;Joe Burrow&quot;)
+Herbert &lt;- bind_rows(HerbertR, Herbert) %&gt;%
+  mutate(Player = &quot;Justin Herbert&quot;)
+Tua &lt;- bind_rows(TuaR, Tua) %&gt;%
+  mutate(Player = &quot;Tua Tagovailoa&quot;)
+Love &lt;- bind_rows(LoveR, Love) %&gt;%
+  mutate(Player = &quot;Jordan Love&quot;)
+
+QBs20 &lt;- bind_rows(Burrow, Herbert, Tua, Love) %&gt;%
+  group_by(Player)</code></pre>
+<p>I did the same thing I did above, but with the 2021 class now. I just copied and pasted it down below and then replaced the names. It is a fairly simple process since I already had the correct setup to combine the players from before. Work smarter, not harder.</p>
+<pre class="r"><code>Lawrence &lt;- bind_rows(LawrenceR, Lawrence) %&gt;%
+  mutate(Player = &quot;Trever Lawrence&quot;)
+Wilson &lt;- bind_rows(WilsonR, Wilson) %&gt;%
+  mutate(Player = &quot;Zach Wilson&quot;)
+Fields &lt;- bind_rows(Fields, FieldsR) %&gt;%
+  mutate(Player = &quot;Justin Fields&quot;)
+Lance &lt;- bind_rows(Lance, LanceR) %&gt;%
+  mutate(Player = &quot;Trey Lance&quot;)
+
+QBs21 &lt;- bind_rows(Lawrence, Wilson, Fields, Lance) </code></pre>
+<p>My final step was to combine data frames again. This time the two frames are the cleaned-up quarterback classes of 2020 and 2021.</p>
+<pre class="r"><code>AllQBs &lt;- bind_rows(QBs20, QBs21,) </code></pre>
+<p>Now I can look at the stats that I want to. We just had to make the puzzle a little easier to put together. There were some “n/a” variables in my combined data sets, so I removed them.</p>
+<p>I want to compare these two quarterback classes statistically throughout their careers. To do this, I summarized all of their stats to create their career totals. I want to see if these players were a flash in the pan or if they were consistent.</p>
+<pre class="r"><code>CareerQBs &lt;- AllQBs %&gt;% filter(is.na(Pct) == FALSE) %&gt;%
+  group_by(Player) %&gt;%
+  summarise(
+    CareerPct = mean(Pct),
+    CareerPYds = sum(Yds),
+    CareerTDs = sum(TD),
+    CareerInt = sum(Int),
+    CareerAtt = sum(Att),
+    CareerCmp = sum(Cmp),
+  )</code></pre>
+<p>Trevor Lawrence is the undisputed number one pick this year. The Jacksonville Jaguars probably haven’t thought of this pick for a while. If anyone in the Jag’s front office has suggested that they should take someone else with the number one pick, that person probably doesn’t work there anymore.</p>
+<p>I made two new data frames to be able to compare Trevor Lawrence and Justin Herbert. I chose to make one for Herbert too because he won the Rookie of the Year award this past season. He also broke several rookie quarterback records.</p>
+<pre class="r"><code>HerbertAvgs &lt;- CareerQBs %&gt;% 
+  filter(Player == &quot;Justin Herbert&quot;)
+LawrenceAvgs &lt;- CareerQBs %&gt;% 
+  filter(Player == &quot;Trever Lawrence&quot;)</code></pre>
+<p>Every time the draft is coming up, I hear references to Bill Parcells’ criteria for drafting quarterbacks. He used a checklist to determine if a quarterback was good enough to draft or not.</p>
+<p>One of the pieces on the list was that the QB had to complete at least 60% of their passes. That isn’t a number that is crazy high at all now. As long as they completed a little over half of their passes during their college career, they were an option.</p>
+<p>Let’s take a look at if anyone from the past two classes checks that box.</p>
+<pre class="r"><code>ggplot() + 
+  geom_point(
+    data=CareerQBs, 
+    aes(x=CareerAtt, y=CareerCmp, size=CareerPct)
+  ) +
+  geom_point(
+    data=HerbertAvgs, 
+    aes(x=CareerAtt, y=CareerCmp, size=CareerPct), color=&quot;#FEE123&quot;
+    ) +
+  geom_point(
+    data=LawrenceAvgs, 
+    aes(x=CareerAtt, y=CareerCmp, size=CareerPct), color=&quot;#F56600&quot; 
+    ) +
+  geom_text_repel(data=CareerQBs, aes(x=CareerAtt, y=CareerCmp, label=Player)) +
+  labs(x=&quot;Career Attempts&quot;, y=&quot;Career Completions&quot;, title=&quot;Trevor Lawrence&#39;s Arm Talent Deserves the Praise&quot;, subtitle=&quot;Where was the generational talent hype for Herbert though?&quot;, caption=&quot;Source: Sports-Reference.com | By Chase Stubbs&quot;) +
+  theme_minimal() +
+   theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    ) </code></pre>
+<p><img src="http://chasestubbs.github.io/2021/04/19/who-had-the-better-qb-draft-class-2020-or-2021/index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>On this bubble chart, Trevor Lawrence is the most efficient and battle-tested quarterback of the 2021 class. He has around a 70% completion rate while having thrown the ball almost 1250 times!</p>
+<p>Seeing this didn’t surprise me that much though. What does surprise me are the outliers on the chart. Trey Lance of North Dakota State threw the ball just over 250 times in his career! He was the most effective at completing passes too. He has the highest career completion percentage at around 80%. He did have his 2020 season canceled however due to COVID, so you can’t blame him for that. He didn’t have to throw much, but when he did he was effective.</p>
+<p>The other person that surprised me was Justin Herbert. He and Lawrence have attempted and completed the most passes, and both have around that 70% rate. Joe Burrow was last year’s Trevor Lawrence. They both were the undisputed number one picks. Even though here, Herbert appears he should have been according to this chart.</p>
+<p>Based on one chart so far I would give the edge to the 2020 quarterback class. Simply because every player from last year is slightly ahead of their closest counterpart, and Herbert is better than Lawrence.</p>
+<p>2020 - 1
+2021 - 0</p>
+<p>Another factor in Bill Parcells’ checklist was that a quarterback had to have a 2-1 touchdown-to-interception ratio.</p>
+<pre class="r"><code>ggplot() + 
+  geom_dumbbell(
+    data=CareerQBs, 
+    aes(y=reorder(Player, CareerTDs), x=CareerInt, xend=CareerTDs),
+    colour = &quot;grey&quot;,
+    colour_x = &quot;red&quot;,
+    colour_xend = &quot;green&quot;,
+    size_x = 1.25, size_xend = 1.25) +
+    labs(title = &quot;Trevor Lawrence Is The Clear-Cut QB1 of 2021&quot;, subtitle = &quot;Lawrence&#39;s and Herbert&#39;s TD(green) to Int(red) ratios are eerily similar&quot;, y=&quot;&quot;, x=&quot;TD-INT Ratio&quot;, caption=&quot;Source: Sports-Reference.com | By Chase Stubbs&quot;) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )</code></pre>
+<p><img src="http://chasestubbs.github.io/2021/04/19/who-had-the-better-qb-draft-class-2020-or-2021/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>I made a dumbbell chart to examine each quarterback’s total touchdowns and total interceptions. The green dot is touchdowns and the red is interceptions. Here we see two familiar names at the top of the chart. Herbert and Lawrence both scored and took care of the ball at very similar rates.</p>
+<p>Trey lance is once again a very intriguing prospect on this chart. He only played one year, and we saw that in the chart above. Lance never once threw an interception! He didn’t throw it that much, but having no interceptions at all is still impressive.</p>
+<p>Three of the top four quarterbacks in terms of TD-INT ratio are from the 2020 class. That makes it pretty easy to give another score to the class of 2020.</p>
+<p>2020 - 2
+2021 - 0</p>
+<p>There are three charts in this article, and the class of 2020 has already won the first two. Based on that, the 2020 class is better I still want to look at one more stat to see if what I have determined to be true is true.</p>
+<pre class="r"><code>effiency &lt;- AllQBs %&gt;% 
+  filter(is.na(Pct) == FALSE) </code></pre>
+<p>I want to look at all of the quarterbacks efficiency ratings. This is calculated by taking (8.4* Passing Yards + 330 * TD - 200 * Int + 100 * Completions)/Attempts.</p>
+<p>I made a data frame titled “efficiency” and used the same process to remove the pieces of data that say “n/a”.</p>
+<pre class="r"><code>ggplot() + 
+  geom_bar(data=effiency, aes(x=Year, weight=Rate)) + 
+  facet_wrap(~Player) +
+  labs(title = &quot;The Top 8 QBs from 2020 and 2021 \nAre Above Average in Efficiency&quot;, subtitle = &quot;Jordan Love is the worst of the best.(Sorry Packer Fans)&quot;, y=&quot;QBR Rating&quot;, x=&quot;&quot;, caption=&quot;Source: Sports-Reference.com | By Chase Stubbs&quot;) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )</code></pre>
+<p><img src="http://chasestubbs.github.io/2021/04/19/who-had-the-better-qb-draft-class-2020-or-2021/index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+To have a baseline for what the bar charts show, an average efficiency rating is around 80. If a player has a rating of 100+ they are considered very good. Here we see that all of the quarterbacks are not just good, but they’re great. Many of them are very consistent also, or never had a drastic drop in their rating.</p>
+<p>The king of efficiency rating would have to be Tua. Every year he improved his rating. Having around a 170 rating is good enough as is, but he continued to increase that to 200!</p>
+<p>The loser of the efficiency test is Jordan’s love. He comes from the 2020 class with Tua. He was drafted late in the first round of the 2020 draft by the Green bay Packers.</p>
+<p>Fun Fact: Jordan love was drafted from Utah State, which is where Bobby Wagner is from. After seeing the charts though, I have a feeling Love won’t be experiencing as successful of a career as Mr. Wagner.</p>
+<p>I have to give the point here to the class of 2021. They may not have as high of scores as the 2020 class, but they all have consistently high ratings and no one ever took a significant drop off.</p>
+<p>Both classes possess great talent that should help whoever drafts them. The NFL is better when the stars are young, and with what I have seen from the data, the NFL is in good hands for years to come.</p>
+<p>With that being said the final score of this contest…</p>
+<p>2020 - 2
+2021 -1</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
