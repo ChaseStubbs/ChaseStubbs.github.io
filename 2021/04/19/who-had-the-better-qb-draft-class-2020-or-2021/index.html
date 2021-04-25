@@ -78,7 +78,7 @@
 
 <p>In the NFL, 32 teams play 16 games in 17 weeks for the chance to play in the Super Bowl. That means that a full NFL season, from preseason to Super Bowl, is roughly seven months. Teams don’t just compete during this time frame though. The real work for the Lombardi Trophy begins after the Super Bowl.</p>
 <p>The offseason is my favorite part of football. I love the idea of building a team through a draft, recruiting, or free agency. Watching the games is a blast, but it’s fun because of the behind-the-scenes work in the offseason. Champions are made in the offseason they do say.</p>
-<p>Due to COVID-19 restrictions, the NFL has not been able to have the combine the past two offseasons, but that hasn’t stopped the hype for the top quarterbacks in their respective classes. The 2020 quarterback class is regarded as one of the bests in recent memory, but 2021 has something to say about that with the likes of Trevor Lawrence and Justin Fields.</p>
+<p>Due to COVID-19 restrictions, the NFL has not been able to have the combine the past two offseasons, but that hasn’t stopped the hype for the top quarterbacks in their respective classes. The 2020 quarterback class is regarded as one of the best in recent memory, but 2021 has something to say about that with the likes of Trevor Lawrence and Justin Fields.</p>
 <p>So which class had the better QB class? 2020 or 2021?</p>
 <pre class="r"><code>library(tidyverse)
 library(ggrepel)
@@ -165,7 +165,8 @@ LawrenceAvgs &lt;- CareerQBs %&gt;%
     aes(x=CareerAtt, y=CareerCmp, size=CareerPct), color=&quot;#F56600&quot; 
     ) +
   geom_text_repel(data=CareerQBs, aes(x=CareerAtt, y=CareerCmp, label=Player)) +
-  labs(x=&quot;Career Attempts&quot;, y=&quot;Career Completions&quot;, title=&quot;Trevor Lawrence&#39;s Arm Talent Deserves the Praise&quot;, subtitle=&quot;Where was the generational talent hype for Herbert though?&quot;, caption=&quot;Source: Sports-Reference.com | By Chase Stubbs&quot;) +
+  labs(x=&quot;Career Attempts&quot;, y=&quot;Career Completions&quot;, 
+       title=&quot;Trevor Lawrence&#39;s Arm Talent Deserves the Praise&quot;, subtitle=&quot;Where was the generational talent hype for Herbert though?&quot;, caption=&quot;Source: Sports-Reference.com | By Chase Stubbs&quot;) +
   theme_minimal() +
    theme(
     plot.title = element_text(size = 16, face = &quot;bold&quot;),
@@ -203,7 +204,7 @@ LawrenceAvgs &lt;- CareerQBs %&gt;%
 <p>Three of the top four quarterbacks in terms of TD-INT ratio are from the 2020 class. That makes it pretty easy to give another score to the class of 2020.</p>
 <p>2020 - 2
 2021 - 0</p>
-<p>There are three charts in this article, and the class of 2020 has already won the first two. Based on that, the 2020 class is better I still want to look at one more stat to see if what I have determined to be true is true.</p>
+<p>There are three charts in this article, and the class of 2020 has already won the first two. Based on that, the 2020 class is better, but I still want to look at one more stat to see if what I have determined to be true is true.</p>
 <pre class="r"><code>effiency &lt;- AllQBs %&gt;% 
   filter(is.na(Pct) == FALSE) </code></pre>
 <p>I want to look at all of the quarterbacks efficiency ratings. This is calculated by taking (8.4* Passing Yards + 330 * TD - 200 * Int + 100 * Completions)/Attempts.</p>
