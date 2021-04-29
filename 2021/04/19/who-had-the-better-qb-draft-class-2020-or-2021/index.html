@@ -119,7 +119,7 @@ QBs20 &lt;- bind_rows(Burrow, Herbert, Tua, Love) %&gt;%
   group_by(Player)</code></pre>
 <p>I did the same thing I did above, but with the 2021 class now. I just copied and pasted it down below and then replaced the names. It is a fairly simple process since I already had the correct setup to combine the players from before. Work smarter, not harder.</p>
 <pre class="r"><code>Lawrence &lt;- bind_rows(LawrenceR, Lawrence) %&gt;%
-  mutate(Player = &quot;Trever Lawrence&quot;)
+  mutate(Player = &quot;Trevor Lawrence&quot;)
 Wilson &lt;- bind_rows(WilsonR, Wilson) %&gt;%
   mutate(Player = &quot;Zach Wilson&quot;)
 Fields &lt;- bind_rows(Fields, FieldsR) %&gt;%
@@ -147,7 +147,7 @@ QBs21 &lt;- bind_rows(Lawrence, Wilson, Fields, Lance) </code></pre>
 <pre class="r"><code>HerbertAvgs &lt;- CareerQBs %&gt;% 
   filter(Player == &quot;Justin Herbert&quot;)
 LawrenceAvgs &lt;- CareerQBs %&gt;% 
-  filter(Player == &quot;Trever Lawrence&quot;)</code></pre>
+  filter(Player == &quot;Trevor Lawrence&quot;)</code></pre>
 <p>Every time the draft is coming up, I hear references to Bill Parcells’ criteria for drafting quarterbacks. He used a checklist to determine if a quarterback was good enough to draft or not.</p>
 <p>One of the pieces on the list was that the QB had to complete at least 60% of their passes. That isn’t a number that is crazy high at all now. As long as they completed a little over half of their passes during their college career, they were an option.</p>
 <p>Let’s take a look at if anyone from the past two classes checks that box.</p>
@@ -221,7 +221,7 @@ LawrenceAvgs &lt;- CareerQBs %&gt;%
     panel.grid.minor = element_blank()
   )</code></pre>
 <p><img src="http://chasestubbs.github.io/2021/04/19/who-had-the-better-qb-draft-class-2020-or-2021/index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
-To have a baseline for what the bar charts show, an average efficiency rating is around 80. If a player has a rating of 100+ they are considered very good. Here we see that all of the quarterbacks are not just good, but they’re great. Many of them are very consistent also, or never had a drastic drop in their rating.</p>
+To have a baseline for what the bar charts show, an average efficiency rating is around 88.6. If a player has a rating of 100+ they are considered very good. Here we see that all of the quarterbacks are not just good, but they’re great. Many of them are very consistent also, or never had a drastic drop in their rating.</p>
 <p>The king of efficiency rating would have to be Tua. Every year he improved his rating. Having around a 170 rating is good enough as is, but he continued to increase that to 200!</p>
 <p>The loser of the efficiency test is Jordan’s love. He comes from the 2020 class with Tua. He was drafted late in the first round of the 2020 draft by the Green bay Packers.</p>
 <p>Fun Fact: Jordan love was drafted from Utah State, which is where Bobby Wagner is from. After seeing the charts though, I have a feeling Love won’t be experiencing as successful of a career as Mr. Wagner.</p>
